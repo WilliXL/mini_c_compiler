@@ -13,7 +13,6 @@ bool is_digit_ascii(char c)
     return false;
 }
 
-<<<<<<< HEAD
 void* parse_word(string str, size_t* idx, vector<Token>* token_list)
 {
     TokenValue v = {0};
@@ -34,38 +33,15 @@ void* parse_word(string str, size_t* idx, vector<Token>* token_list)
     {
         cout << "YAH" << endl;
         int n = i;
-=======
-void* parse_word(string str, size_t idx, vector<Token>* token_list)
-{
-    if (str.find("int") == idx)
-    {
-        Token t(IntegerKeyword);
-        token_list->push_back(t);
-    }
-    else if (str.find("return") == idx)
-    {
-        Token t(ReturnKeyword);
-        token_list->push_back(t);
-    }
-    else // looking for an identifier
-    {
-        int n = idx;
->>>>>>> 6496488d62609fc338be2aa0dd38efe6198d8585
         while (isalpha(str[n]))
         {
             n++;
         }
-<<<<<<< HEAD
         *idx = n-1;
         TokenValue v;
         strcpy(v.s, (char*)(str.substr(i, n-i)).c_str());
         Token t(Identifier, v);
         token_list->push_back(t);
-=======
-        Token t(Identifier);
-        const char* id = (str.substr(idx, n-idx+1)).c_str();
-        t.set_val((void*)id);
->>>>>>> 6496488d62609fc338be2aa0dd38efe6198d8585
     }
 }
 
@@ -75,26 +51,14 @@ void* lex(string filename, vector<Token>* token_list)
     ifstream file(filename.c_str());
     string str;
     size_t c;
-<<<<<<< HEAD
     TokenValue v = {0};
-=======
->>>>>>> 6496488d62609fc338be2aa0dd38efe6198d8585
     while (getline(file, str))
     {
         c = 0;
         while (c < str.length())
         {
-<<<<<<< HEAD
             // cout << str[c] << endl;
             if (isspace(str[c]))
-=======
-            cout << str[c] << endl;
-            if (isspace(str[c]))
-            {
-                goto next;
-            }
-            else if (str[c] == '{')
->>>>>>> 6496488d62609fc338be2aa0dd38efe6198d8585
             {
                 goto next;
             }
@@ -140,8 +104,6 @@ void* lex(string filename, vector<Token>* token_list)
             }
             else if (is_digit_ascii(str[c]))
             {
-                cout << "YOIT" << endl;
-                Token t(Integer);
                 int i = str[c] - '0';
                 int n = c; n++;
                 while (isdigit(str[n]))
@@ -151,16 +113,14 @@ void* lex(string filename, vector<Token>* token_list)
                     n++;
                 }
                 c = n-1;
-                t.set_val((void*)i);
+                TokenValue v;
+                v.i = i;
+                Token t(Integer, v);
                 token_list->push_back(t);
             }
             else
             {
-<<<<<<< HEAD
                 parse_word(str, &c, token_list);
-=======
-                parse_word(str, c, token_list);
->>>>>>> 6496488d62609fc338be2aa0dd38efe6198d8585
             }
             next:
                 c++;
@@ -192,7 +152,6 @@ int main(int argc, char** argv)
         cout << token_list[i].token_type() << ", ";
     }
     cout << endl;
-<<<<<<< HEAD
     for (size_t i = 0; i < token_list.size(); ++i)
     {
         if (token_list[i].token_type() == Identifier)
@@ -206,7 +165,5 @@ int main(int argc, char** argv)
     }
     cout << endl;
     cout << "Lex'd ID: " << (token_list[1].value().s) << endl;
-=======
->>>>>>> 6496488d62609fc338be2aa0dd38efe6198d8585
     return 0;
 }

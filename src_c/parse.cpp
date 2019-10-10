@@ -88,6 +88,29 @@ void Parser::parse_program(void)
     root = program;
 }
 
+void Parser::print_expression(Expression* e)
+{
+    cout << "Expression: " << e->get_int() << endl;
+}
+
+void Parser::print_statement(Statement* s)
+{
+    cout << "Statement" << endl;
+    print_expression(s->get_expression());
+}
+
+void Parser::print_function(Function* f)
+{
+    cout << "Function: " << f->get_id() << endl;
+    print_statement(f->get_statement());
+}
+
+void Parser::print_tree(void)
+{
+    cout << "Program" << endl;
+    print_function(root->get_func());
+}
+
 } // namespace parser
 
 int main(int argc, char** argv)
@@ -110,4 +133,5 @@ int main(int argc, char** argv)
 
     parser::Parser p(L.get_tokens());
     p.parse_program();
+    p.print_tree();
 }

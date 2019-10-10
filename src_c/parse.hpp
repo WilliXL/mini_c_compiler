@@ -6,18 +6,11 @@ using namespace std;
 namespace parser
 {
 
-enum NodeType
-{
-    program,   // 0
-    function,  // 1
-    statement, // 2
-    expression // 3
-};
-
 class Expression
 {
     public:
         Expression(int i) { integer = i; }
+        int get_int(void) { return integer; }
     private:
         int integer;
 };
@@ -26,6 +19,7 @@ class Statement
 {
     public:
         Statement(Expression* e) { exp = e; }
+        Expression* get_expression(void) { return exp; }
     private:
         Expression* exp;
 };
@@ -38,6 +32,8 @@ class Function
             id = name;
             s = statement;
         }
+        Statement* get_statement(void) { return s; }
+        string get_id(void) { return id; }
     private:
         string id;
         Statement* s;
@@ -47,6 +43,7 @@ class Program
 {
     public:
         Program(Function* f) { func = f; }
+        Function* get_func(void) { return func; }
     private:
         Function* func;
 };
@@ -58,6 +55,9 @@ class Parser
         void parse_program(void);
         void print_tree(void);
     private:
+        void print_function(Function* f);
+        void print_statement(Statement* s);
+        void print_expression(Expression* e);
         void fail_format(string err);
         Function* parse_function(void);
         Statement* parse_statement(void);

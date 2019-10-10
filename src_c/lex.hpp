@@ -41,13 +41,13 @@ class Token
 class Lexer
 {
     public:
-        void* lex(string filename);
-        void* print_tokens(void);
+        void lex(string filename);
+        void print_tokens(void);
         vector<Token>* get_tokens(void) { return &token_list; }
     private:
         bool has_value(int token);
         string get_string(int token);
-        void* lex_word(string str, size_t* idx);
+        void lex_word(string str, size_t* idx);
         vector<Token> token_list;
 };
 

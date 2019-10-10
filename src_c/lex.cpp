@@ -34,7 +34,7 @@ bool Lexer::has_value(int token)
     }
 }
 
-void* Lexer::print_tokens(void)
+void Lexer::print_tokens(void)
 {
     cout << "Token List:" << endl;
     for (size_t ii = 0; ii < token_list.size(); ++ii)
@@ -64,7 +64,7 @@ void* Lexer::print_tokens(void)
     cout << endl;
 }
 
-void* Lexer::lex_word(string str, size_t* idx)
+void Lexer::lex_word(string str, size_t* idx)
 {
     TokenValue v = {0};
     size_t i = *idx;
@@ -96,7 +96,7 @@ void* Lexer::lex_word(string str, size_t* idx)
     }
 }
 
-void* Lexer::lex(string filename)
+void Lexer::lex(string filename)
 {
     // char space = ' ';
     ifstream file(filename.c_str());
@@ -180,22 +180,22 @@ void* Lexer::lex(string filename)
 }
 } // namespace lexer
 
-int main(int argc, char** argv)
-{
-    if (argc < 2)
-    {
-        cout << "You did not enter a file to lex" << endl;;
-        return 1;
-    }
-    string to_lex = argv[1];
-    if (to_lex.find(".c") == string::npos)
-    {
-        cout << "NOT a C file, cannot lex" << endl;
-        return 1;
-    }
-    cout << "Now lexing " << to_lex << endl;
-    lexer::Lexer L;
-    L.lex(to_lex);
-    L.print_tokens();
-    return 0;
-}
+// int main(int argc, char** argv)
+// {
+//     if (argc < 2)
+//     {
+//         cout << "You did not enter a file to lex" << endl;;
+//         return 1;
+//     }
+//     string to_lex = argv[1];
+//     if (to_lex.find(".c") == string::npos)
+//     {
+//         cout << "NOT a C file, cannot lex" << endl;
+//         return 1;
+//     }
+//     cout << "Now lexing " << to_lex << endl;
+//     lexer::Lexer L;
+//     L.lex(to_lex);
+//     L.print_tokens();
+//     return 0;
+// }

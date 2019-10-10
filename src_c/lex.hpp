@@ -2,6 +2,8 @@
 #include <cstring>
 #include <iostream>
 
+using namespace std;
+
 namespace lexer
 {
 
@@ -34,6 +36,19 @@ class Token
     private:
         TokenType t;
         TokenValue val; // used for identifiers and literals
+};
+
+class Lexer
+{
+    public:
+        void* lex(string filename);
+        void* print_tokens(void);
+        vector<Token>* get_tokens(void) { return &token_list; }
+    private:
+        bool has_value(int token);
+        string get_string(int token);
+        void* lex_word(string str, size_t* idx);
+        vector<Token> token_list;
 };
 
 } //namespace lexer

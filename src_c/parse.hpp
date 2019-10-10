@@ -27,5 +27,6 @@ class Parser
         }
     private:
         vector<lexer::Token> tokens;
-
+        int curr_token = -1;
+        lexer::Token next(void) { curr_token++; return tokens[curr_token]; }
 };

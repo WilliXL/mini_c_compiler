@@ -7,29 +7,77 @@ using namespace std;
 namespace lexer
 {
 
-bool is_digit_ascii(char c)
+string Lexer::get_string(int token)
 {
-    if (c >= 48 && c <= 57)
+    switch(token)
     {
-        return true;
+        case OpenBrace: return "{"; break;
+        case CloseBrace: return "}"; break;
+        case OpenParen: return "("; break;
+        case CloseParen: return ")"; break;
+        case Semicolon: return ";"; break;
+        case ReturnKeyword: return "KW: return"; break;
+        case Identifier: return "ID"; break;
+        case IntegerKeyword: return "KW: int"; break;
+        case Integer: return "int"; break;
+        default: return "NaN"; break;
     }
-    return false;
 }
 
-void* parse_word(string str, size_t* idx, vector<Token>* token_list)
+bool Lexer::has_value(int token)
+{
+    switch(token)
+    {
+        case Integer: return true; break;
+        case Identifier: return true; break;
+        default: return false; break;
+    }
+}
+
+void* Lexer::print_tokens(void)
+{
+    cout << "Token List:" << endl;
+    for (size_t ii = 0; ii < token_list.size(); ++ii)
+    {
+        Token t = token_list[ii];
+        cout << "[" << get_string(t.token_type());
+        if (has_value(t.token_type()))
+        {
+            if (t.token_type() == Integer)
+            {
+                cout << ": " << t.value().i;
+            }
+            else if (t.token_type() == Identifier)
+            {
+                cout << ": " << t.value().s;
+            }
+        }
+        if (ii == token_list.size()-1)
+        {
+            cout << "]";
+        }
+        else
+        {
+            cout << "], ";
+        }
+    }
+    cout << endl;
+}
+
+void* Lexer::lex_word(string str, size_t* idx)
 {
     TokenValue v = {0};
     size_t i = *idx;
     if (str.find("int") == i)
     {
         Token t(IntegerKeyword, v);
-        token_list->push_back(t);
+        token_list.push_back(t);
         *idx += 3;
     }
     else if (str.find("return") == i)
     {
         Token t(ReturnKeyword, v);
-        token_list->push_back(t);
+        token_list.push_back(t);
         *idx += 6;
     }
     else // looking for an identifier
@@ -44,11 +92,11 @@ void* parse_word(string str, size_t* idx, vector<Token>* token_list)
         TokenValue v;
         strcpy(v.s, (char*)(str.substr(i, n-i)).c_str());
         Token t(Identifier, v);
-        token_list->push_back(t);
+        token_list.push_back(t);
     }
 }
 
-void* lex(string filename, vector<Token>* token_list)
+void* Lexer::lex(string filename)
 {
     // char space = ' ';
     ifstream file(filename.c_str());
@@ -68,29 +116,29 @@ void* lex(string filename, vector<Token>* token_list)
             else if (str[c] == '{')
             {
                 Token t(OpenBrace, v);
-                token_list->push_back(t);
+                token_list.push_back(t);
             }
             else if (str[c] == '}')
             {
                 Token t(CloseBrace, v);
-                token_list->push_back(t);
+                token_list.push_back(t);
             }
             else if (str[c] == '(')
             {
                 Token t(OpenParen, v);
-                token_list->push_back(t);
+                token_list.push_back(t);
             }
             else if (str[c] == ')')
             {
                 Token t(CloseParen, v);
-                token_list->push_back(t);
+                token_list.push_back(t);
             }
             else if (str[c] == ';')
             {
                 Token t(Semicolon, v);
-                token_list->push_back(t);
+                token_list.push_back(t);
             }
-            else if (is_digit_ascii(str[c]))
+            else if (isdigit(str[c]))
             {
                 int i = str[c] - '0';
                 int n = c; n++;
@@ -103,9 +151,9 @@ void* lex(string filename, vector<Token>* token_list)
                 c = n-1;
                 TokenValue v; v.i = i;
                 Token t(Integer, v);
-                token_list->push_back(t);
+                token_list.push_back(t);
             }
-            else if (is_digit_ascii(str[c]))
+            else if (isdigit(str[c]))
             {
                 int i = str[c] - '0';
                 int n = c; n++;
@@ -119,11 +167,11 @@ void* lex(string filename, vector<Token>* token_list)
                 TokenValue v;
                 v.i = i;
                 Token t(Integer, v);
-                token_list->push_back(t);
+                token_list.push_back(t);
             }
             else
             {
-                parse_word(str, &c, token_list);
+                lex_word(str, &c);
             }
             next:
                 c++;
@@ -146,26 +194,8 @@ int main(int argc, char** argv)
         return 1;
     }
     cout << "Now lexing " << to_lex << endl;
-    vector<lexer::Token> token_list;
-    lexer::lex(to_lex, &token_list);
-    cout << "Token List Size: " << token_list.size() << endl;
-    cout << "Tokens: " << endl;
-    for (size_t i = 0; i < token_list.size(); ++i)
-    {
-        cout << token_list[i].token_type() << ", ";
-    }
-    cout << endl;
-    for (size_t i = 0; i < token_list.size(); ++i)
-    {
-        if (token_list[i].token_type() == lexer::Identifier)
-        {
-            cout << token_list[i].value().s << ", ";
-        }
-        if (token_list[i].token_type() == lexer::Integer)
-        {
-            cout << token_list[i].value().i << ", ";
-        }
-    }
-    cout << endl;
+    lexer::Lexer L;
+    L.lex(to_lex);
+    L.print_tokens();
     return 0;
 }

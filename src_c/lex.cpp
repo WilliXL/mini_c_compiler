@@ -4,6 +4,9 @@
 
 using namespace std;
 
+namespace lexer
+{
+
 bool is_digit_ascii(char c)
 {
     if (c >= 48 && c <= 57)
@@ -127,7 +130,7 @@ void* lex(string filename, vector<Token>* token_list)
         }
     }
 }
-
+} // namespace lexer
 
 int main(int argc, char** argv)
 {
@@ -143,8 +146,8 @@ int main(int argc, char** argv)
         return 1;
     }
     cout << "Now lexing " << to_lex << endl;
-    vector<Token> token_list;
-    lex(to_lex, &token_list);
+    vector<lexer::Token> token_list;
+    lexer::lex(to_lex, &token_list);
     cout << "Token List Size: " << token_list.size() << endl;
     cout << "Tokens: " << endl;
     for (size_t i = 0; i < token_list.size(); ++i)
@@ -154,16 +157,15 @@ int main(int argc, char** argv)
     cout << endl;
     for (size_t i = 0; i < token_list.size(); ++i)
     {
-        if (token_list[i].token_type() == Identifier)
+        if (token_list[i].token_type() == lexer::Identifier)
         {
             cout << token_list[i].value().s << ", ";
         }
-        if (token_list[i].token_type() == Integer)
+        if (token_list[i].token_type() == lexer::Integer)
         {
             cout << token_list[i].value().i << ", ";
         }
     }
     cout << endl;
-    cout << "Lex'd ID: " << (token_list[1].value().s) << endl;
     return 0;
 }

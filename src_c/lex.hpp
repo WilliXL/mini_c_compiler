@@ -2,6 +2,9 @@
 #include <cstring>
 #include <iostream>
 
+namespace lexer
+{
+
 enum TokenType
 {
     OpenBrace,      // 0
@@ -32,3 +35,5 @@ class Token
         TokenType t;
         TokenValue val; // used for identifiers and literals
 };
+
+} //namespace lexer

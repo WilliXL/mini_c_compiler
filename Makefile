@@ -1,7 +1,7 @@
 CC=g++
 
-all: src_c/lex.cpp src_c/lex.hpp
-	$(CC) -g -Wall -o mcc src_c/lex.cpp src_c/lex.hpp
+all: src_c/generate.cpp src_c/parse.cpp src_c/lex.cpp
+	$(CC) -g -Wall -o mcc src_c/generate.cpp src_c/parse.cpp src_c/lex.cpp
 
 clean:
 	$(RM) mcc

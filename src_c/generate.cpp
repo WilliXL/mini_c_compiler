@@ -43,6 +43,8 @@ int main(int argc, char** argv)
     L.lex(to_lex);
     L.print_tokens();
 
+    cout << endl;
+
     parser::Parser p(L.get_tokens());
     p.parse_program();
     p.print_tree();

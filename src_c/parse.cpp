@@ -19,7 +19,7 @@ Expression* Parser::parse_expression(void)
         fail_format("Expcted integer");
     }
     val = t.value().i;
-    Expression* expression = new Expression(val);
+    Expression* expression = new Expression(val, t.token_type());
 
     return expression;
 }
@@ -50,6 +50,7 @@ Function* Parser::parse_function(void)
     {
         fail_format("Expected keyword: int");
     }
+    lexer::TokenType rt = t.token_type();
     t = next();
     if (t.token_type() != lexer::Identifier)
     {
@@ -72,7 +73,7 @@ Function* Parser::parse_function(void)
         fail_format("Expcted an {");
     }
     Statement* statement = parse_statement();
-    Function* function = new Function(name, statement);
+    Function* function = new Function(name, statement, rt);
     t = next();
     if (t.token_type() != lexer::CloseBrace)
     {
@@ -90,23 +91,26 @@ void Parser::parse_program(void)
 
 void Parser::print_expression(Expression* e)
 {
-    cout << "Expression: " << e->get_int() << endl;
+    cout << "RETURN " << lexer::get_string(e->get_type()) << "<" <<
+        e->get_int() << ">" << endl;
 }
 
 void Parser::print_statement(Statement* s)
 {
-    cout << "Statement" << endl;
+    cout << "\t";
     print_expression(s->get_expression());
 }
 
 void Parser::print_function(Function* f)
 {
-    cout << "Function: " << f->get_id() << endl;
+    cout << "Function " << f->get_id() << ": () -> " << f->get_return_type()
+        << endl;
     print_statement(f->get_statement());
 }
 
 void Parser::print_tree(void)
 {
+    cout << "AST:" << endl;
     cout << "Program" << endl;
     print_function(root->get_func());
 }

@@ -9,9 +9,11 @@ namespace parser
 class Expression
 {
     public:
-        Expression(int i) { integer = i; }
+        Expression(int i, lexer::TokenType t) { integer = i; type = t;}
         int get_int(void) { return integer; }
+        lexer::TokenType get_type(void) { return type; }
     private:
+        lexer::TokenType type;
         int integer;
 };
 
@@ -27,14 +29,17 @@ class Statement
 class Function
 {
     public:
-        Function(string name, Statement* statement)
+        Function(string name, Statement* statement, lexer::TokenType rt)
         {
             id = name;
             s = statement;
+            return_type = rt;
         }
         Statement* get_statement(void) { return s; }
         string get_id(void) { return id; }
+        string get_return_type(void) { return lexer::get_string(return_type); }
     private:
+        lexer::TokenType return_type;
         string id;
         Statement* s;
 };

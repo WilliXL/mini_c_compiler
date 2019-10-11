@@ -6,7 +6,7 @@ using namespace std;
 namespace lexer
 {
 
-string Lexer::get_string(int token)
+string get_string(int token)
 {
     switch(token)
     {
@@ -15,9 +15,9 @@ string Lexer::get_string(int token)
         case OpenParen: return "("; break;
         case CloseParen: return ")"; break;
         case Semicolon: return ";"; break;
-        case ReturnKeyword: return "KW: return"; break;
+        case ReturnKeyword: return "RETURN"; break;
         case Identifier: return "ID"; break;
-        case IntegerKeyword: return "KW: int"; break;
+        case IntegerKeyword: return "INT"; break;
         case Integer: return "int"; break;
         default: return "NaN"; break;
     }
@@ -81,7 +81,6 @@ void Lexer::lex_word(string str, size_t* idx)
     }
     else // looking for an identifier
     {
-        cout << "YAH" << endl;
         int n = i;
         while (isalpha(str[n]))
         {

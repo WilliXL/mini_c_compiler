@@ -18,7 +18,10 @@ enum TokenType
     ReturnKeyword,  // 5
     Identifier,     // 6
     IntegerKeyword, // 7
-    Integer         // 8
+    Integer,        // 8
+    Negation,       // 9
+    Complement,     // 10
+    Bang            // 11
 };
 
 union TokenValue
@@ -30,8 +33,8 @@ union TokenValue
 class Token
 {
     public:
-        Token(TokenType type, TokenValue v) { t = type; val = v; }
-        // void set_val(TokenValue value) { val = value; }
+        Token(TokenType type) { t = type; }
+        void set_val(TokenValue value) { val = value; }
         TokenType token_type(void) { return t; }
         TokenValue value(void) { return val; }
     private:

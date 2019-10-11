@@ -19,6 +19,9 @@ string get_string(int token)
         case Identifier: return "ID"; break;
         case IntegerKeyword: return "INT"; break;
         case Integer: return "int"; break;
+        case Negation: return "-"; break;
+        case Complement: return "~"; break;
+        case Bang: return "!"; break;
         default: return "NaN"; break;
     }
 }
@@ -65,17 +68,16 @@ void Lexer::print_tokens(void)
 
 void Lexer::lex_word(string str, size_t* idx)
 {
-    TokenValue v = {0};
     size_t i = *idx;
     if (str.find("int") == i)
     {
-        Token t(IntegerKeyword, v);
+        Token t(IntegerKeyword);
         token_list.push_back(t);
         *idx += 3;
     }
     else if (str.find("return") == i)
     {
-        Token t(ReturnKeyword, v);
+        Token t(ReturnKeyword);
         token_list.push_back(t);
         *idx += 6;
     }
@@ -89,7 +91,8 @@ void Lexer::lex_word(string str, size_t* idx)
         *idx = n-1;
         TokenValue v;
         strcpy(v.s, (char*)(str.substr(i, n-i)).c_str());
-        Token t(Identifier, v);
+        Token t(Identifier);
+        t.set_val(v);
         token_list.push_back(t);
     }
 }
@@ -100,7 +103,6 @@ void Lexer::lex(string filename)
     ifstream file(filename.c_str());
     string str;
     size_t c;
-    TokenValue v = {0};
     while (getline(file, str))
     {
         c = 0;
@@ -113,27 +115,42 @@ void Lexer::lex(string filename)
             }
             else if (str[c] == '{')
             {
-                Token t(OpenBrace, v);
+                Token t(OpenBrace);
                 token_list.push_back(t);
             }
             else if (str[c] == '}')
             {
-                Token t(CloseBrace, v);
+                Token t(CloseBrace);
                 token_list.push_back(t);
             }
             else if (str[c] == '(')
             {
-                Token t(OpenParen, v);
+                Token t(OpenParen);
                 token_list.push_back(t);
             }
             else if (str[c] == ')')
             {
-                Token t(CloseParen, v);
+                Token t(CloseParen);
                 token_list.push_back(t);
             }
             else if (str[c] == ';')
             {
-                Token t(Semicolon, v);
+                Token t(Semicolon);
+                token_list.push_back(t);
+            }
+            else if (str[c] == '-')
+            {
+                Token t(Negation);
+                token_list.push_back(t);
+            }
+            else if (str[c] == '~')
+            {
+                Token t(Complement);
+                token_list.push_back(t);
+            }
+            else if (str[c] == '!')
+            {
+                Token t(Bang);
                 token_list.push_back(t);
             }
             else if (isdigit(str[c]))
@@ -148,23 +165,8 @@ void Lexer::lex(string filename)
                 }
                 c = n-1;
                 TokenValue v; v.i = i;
-                Token t(Integer, v);
-                token_list.push_back(t);
-            }
-            else if (isdigit(str[c]))
-            {
-                int i = str[c] - '0';
-                int n = c; n++;
-                while (isdigit(str[n]))
-                {
-                    i *= 10;
-                    i += (str[n] - '0');
-                    n++;
-                }
-                c = n-1;
-                TokenValue v;
-                v.i = i;
-                Token t(Integer, v);
+                Token t(Integer);
+                t.set_val(v);
                 token_list.push_back(t);
             }
             else

@@ -1,3 +1,4 @@
 .vscode/
 b.out
 mcc
+*.s

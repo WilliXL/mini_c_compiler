@@ -14,14 +14,26 @@ Expression* Parser::parse_expression(void)
 {
     lexer::Token t = next();
     int val;
-    if (t.token_type() != lexer::Integer)
+    Expression* expression = new Expression();
+    if (t.token_type() == lexer::Integer)
     {
-        fail_format("Expcted integer");
+        val = t.value().i;
+        expression->set_val(val);
+        return expression;
     }
-    val = t.value().i;
-    Expression* expression = new Expression(val, t.token_type());
-
-    return expression;
+    else
+    {
+        lexer::TokenType op = t.token_type();
+        if (op != lexer::Negation   &&
+            op != lexer::Complement &&
+            op != lexer::Bang)
+        {
+            fail_format("Unsupported unary operators");
+        }
+        Expression* inner_expression = parse_expression();
+        inner_expression->set_type(op);
+        return inner_expression;
+    }
 }
 
 Statement* Parser::parse_statement(void)
@@ -32,7 +44,9 @@ Statement* Parser::parse_statement(void)
         fail_format("Expcted keyword: return");
     }
     Expression* expression = parse_expression();
-    Statement* statement = new Statement(expression);
+    Statement* statement = new Statement();
+    statement->set_expression(expression);
+    statement->set_type(t.token_type());
     t = next();
     if (t.token_type() != lexer::Semicolon)
     {

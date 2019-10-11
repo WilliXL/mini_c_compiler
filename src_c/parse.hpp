@@ -9,21 +9,30 @@ namespace parser
 class Expression
 {
     public:
-        Expression(int i, lexer::TokenType t) { integer = i; type = t;}
+        Expression() {}
         int get_int(void) { return integer; }
         lexer::TokenType get_type(void) { return type; }
+        Expression* get_expression(void) { return exp; }
+        void set_type(lexer::TokenType t) { type = t; }
+        void set_val(int i) { integer = i; }
+        void set_expression(Expression* e) { exp = e; }
     private:
         lexer::TokenType type;
         int integer;
+        Expression* exp;
 };
 
 class Statement
 {
     public:
-        Statement(Expression* e) { exp = e; }
+        Statement() {}
         Expression* get_expression(void) { return exp; }
+        void set_expression(Expression* e) { exp = e; }
+        void set_type(lexer::TokenType t) { type = t; }
+        lexer::TokenType get_type(void) { return type; }
     private:
         Expression* exp;
+        lexer::TokenType type;
 };
 
 class Function

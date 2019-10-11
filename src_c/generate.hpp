@@ -12,6 +12,7 @@ class Generator
         void generate(string name);
     private:
         parser::Program* root;
+        string generate_return(int val);
 };
 
 } // namespace generator

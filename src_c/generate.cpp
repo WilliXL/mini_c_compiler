@@ -5,6 +5,13 @@ using namespace std;
 namespace generator
 {
 
+string Generator::generate_return(int val)
+{
+    char statement[100];
+    sprintf(statement, "\tmov\t$%d, %rax\n\tret\n", val);
+    return string(statement);
+}
+
 void Generator::generate(string name)
 {
     parser::Function* function = root->get_func();
@@ -17,8 +24,11 @@ void Generator::generate(string name)
     parser::Statement* statement = function->get_statement();
     parser::Expression* expression = statement->get_expression();
 
-    out << "\tmov\t$" << expression->get_int() << ", %rax\n";
-    out << "\tret\n";
+    int val = expression->get_int();
+    if (statement->get_type() == lexer::ReturnKeyword)
+    {
+        out << generate_return(val);
+    }
     out.close();
 }
 
@@ -60,5 +70,5 @@ int main(int argc, char** argv)
     sprintf(make_cmd, "gcc %s -o b.out", output.c_str());
     sprintf(rm_cmd, "rm %s", output.c_str());
     system(((char*)make_cmd));
-    system((char*)rm_cmd);
+    // system((char*)rm_cmd);
 }

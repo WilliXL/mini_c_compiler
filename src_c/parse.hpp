@@ -54,6 +54,7 @@ class Parser
         Parser(vector<lexer::Token>* token_list) { tokens = *token_list; }
         void parse_program(void);
         void print_tree(void);
+        Program* get_tree(void) { return root; }
     private:
         void print_function(Function* f);
         void print_statement(Statement* s);

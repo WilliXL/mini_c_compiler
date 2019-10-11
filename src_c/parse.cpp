@@ -112,26 +112,3 @@ void Parser::print_tree(void)
 }
 
 } // namespace parser
-
-int main(int argc, char** argv)
-{
-    if (argc < 2)
-    {
-        cout << "You did not enter a file to lex" << endl;;
-        return 1;
-    }
-    string to_lex = argv[1];
-    if (to_lex.find(".c") == string::npos)
-    {
-        cout << "NOT a C file, cannot lex" << endl;
-        return 1;
-    }
-    cout << "Now lexing " << to_lex << endl;
-    lexer::Lexer L;
-    L.lex(to_lex);
-    L.print_tokens();
-
-    parser::Parser p(L.get_tokens());
-    p.parse_program();
-    p.print_tree();
-}

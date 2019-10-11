@@ -55,7 +55,10 @@ int main(int argc, char** argv)
     string output = (to_lex.substr(0,to_lex.length()-2)).append(".s");
     g->generate(output);
 
-    char cmd[50];
-    sprintf(cmd, "gcc %s -o b.out", output.c_str());
-    system(((char*)cmd));
+    char make_cmd[40];
+    char rm_cmd[30];
+    sprintf(make_cmd, "gcc %s -o b.out", output.c_str());
+    sprintf(rm_cmd, "rm %s", output.c_str());
+    system(((char*)make_cmd));
+    system((char*)rm_cmd);
 }

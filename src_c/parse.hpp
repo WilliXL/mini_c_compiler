@@ -70,7 +70,7 @@ class Parser
         Expression* parse_expression(void);
         vector<lexer::Token> tokens;
         int curr_token = -1;
-        bool has_next(void) { return curr_token < tokens.size() - 1; }
+        bool has_next(void) { return curr_token < (int)tokens.size() - 1; }
         lexer::Token next(void) { curr_token++; return tokens[curr_token]; }
         Program* root;
 };
